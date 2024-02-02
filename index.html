@@ -1,0 +1,18 @@
+<html>
+    <title>
+
+    </title>
+    <script src='app/app.js'></script>
+    <script src='app/router.js'></script>
+    <script src='components/about/about.js'></script>
+    <script src='components/home/home.js'></script>
+    <script src='components/navigation/navigation.js'></script>
+    <script>
+        let app = new App();
+        app.registrate('/about', 'about', new About());
+        app.registrate('/', 'home', new Home());
+        app.ready();
+    </script>
+    <app-navigation></app-navigation>
+    <app-router></app-router>
+</html>
