@@ -9,4 +9,4 @@ class Home extends HTMLElement {
     }
     disconnectedCallback() {}
 }
-Component('app-home', Home);
+RegisterComponent('app-home', Home);
