@@ -9,4 +9,4 @@ class About extends HTMLElement {
     disconnectedCallback() {}
 }
 
-Component('app-about', About);
+RegisterComponent('app-about', About);

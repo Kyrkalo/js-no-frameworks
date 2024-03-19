@@ -3,30 +3,10 @@ class App {
     templates = {};
     currentTemplate;
 
-    #route (path, template) {
-        // if (typeof template === 'function') {
-        //     return this.routes[path] = template;
-        // }
-        if (typeof template === 'string') {
-            return this.routes[path] = this.templates[template];
-        }
-        return undefined;        
-    }
-
-    resolveRoute(route) {
-        try {
-            return this.routes[route];
-        } catch (e) {
-            throw new Error(`Route ${route} not found`);
-        }
-    }
-
     async router(evt) {
         let url = window.location.hash.slice(1) || '/';
 
-
         let route = this.resolveRoute(url);
-
 
         if (route && this.currentTemplate != route) {
             let approuter = document.body.getElementsByTagName('app-router')[0];
@@ -42,15 +22,14 @@ class App {
             } else {
                 throw new Error(`Template is not defined: ${response.status} ${response.statusText}`);
             }
-
         }
     }
 
-    #template = (name, func) => this.templates[name] = func;
+    resolveRoute = (route) => this.routes[route];
 
     registrate(path, name, f) {
-        this.#template(name, f);
-        this.#route(path, name);
+        this.templates[name] = f;
+        this.routes[path] = f;
     }
 
     ready() {
@@ -59,4 +38,4 @@ class App {
     }
 }
 
-Component = (name, element) => customElements.define(name, element);
+RegisterComponent = (name, element) => customElements.define(name, element);

@@ -12,4 +12,4 @@ class Navigation extends HTMLElement {
     disconnectedCallback() {}
 }
 
-Component('app-navigation', Navigation);
+RegisterComponent('app-navigation', Navigation);
