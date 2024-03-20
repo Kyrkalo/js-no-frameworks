@@ -8,6 +8,7 @@ class Components extends HTMLElement {
     connectedCallback() {
         this.onInit();
         this.afterInit();
+        this.update();
     }
 
     disconnectedCallback() {
@@ -19,6 +20,20 @@ class Components extends HTMLElement {
     afterInit() { }
 
     dispose() { }
+
+    update() {
+        const elementsWithDataBind = document.querySelectorAll('[data-bind]');
+        elementsWithDataBind.forEach(e => {
+            const instance = e.dataset.bind.split('.');
+            if (instance) {
+                let t = this;
+                for(let item of instance) {
+                    t = t[item];
+                }
+                e.value = t;
+            }
+        });
+    }
 
     binding() {
         setTimeout(() => {
