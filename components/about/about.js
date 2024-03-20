@@ -1,12 +1,7 @@
-class About extends HTMLElement {
+class About extends Components {
     
     template = 'components/about/about.html';
     href = '#/about';
-
-    connectedCallback() {
-        //this.innerHTML = this.template;
-    }
-    disconnectedCallback() {}
 }
 
 RegisterComponent('app-about', About);
