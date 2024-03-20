@@ -7,7 +7,7 @@ class ProfileService {
 
     async SaveAsync() { }
 
-    Read = () => JSON.parse(localStorage.getItem('profile') ?? { fname: '', lname: '', birth: '' });
+    Read = () => JSON.parse(localStorage.getItem('profile'))?? { fname: '', lname: '', birth: '' };
 
     async ReadAsync() { }
 }

@@ -47,7 +47,13 @@ class Components extends HTMLElement {
         let t = this;
         if (event.target.dataset.bind) {
             const instance = event.target.dataset.bind.split('.');
-            instance.forEach((e, i) => i == instance.length - 1 ? t[e] = event.target.value : t = t[e]);
+            instance.forEach((e, i) => {
+                if (i == instance.length - 1) {
+                    t[e] = event.target.value
+                } else {
+                    t = !t[e] ? t[e] = {} : t[e];
+                }
+            });
         }
     }
 }
