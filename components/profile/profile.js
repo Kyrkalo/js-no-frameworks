@@ -14,6 +14,7 @@ class Profile extends Components {
 
     onInit() {
         this.data = this.profileService.Read();
+        
         document.getElementById('fname').value = this.data?.fname;
         document.getElementById('lname').value = this.data?.lname;
         document.getElementById('birth').value = this.data?.birth;

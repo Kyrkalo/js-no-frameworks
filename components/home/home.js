@@ -1,12 +1,7 @@
 
 
-class Home extends HTMLElement {
+class Home extends Components {
     href = '#/';
     template = 'components/home/home.html';
-
-    connectedCallback() {
-        //this.innerHTML = this.template;
-    }
-    disconnectedCallback() {}
 }
 RegisterComponent('app-home', Home);

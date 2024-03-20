@@ -1,6 +1,6 @@
-class Navigation extends HTMLElement {
+class Navigation extends Components {
     template = 'components/navigation/navigation.html';
-    async connectedCallback() {
+    async onInit() {
 
         let response = await fetch(this.template);
             if (response.ok) {
@@ -9,7 +9,6 @@ class Navigation extends HTMLElement {
                 throw new Error(`Failed to fetch HTML file: ${response.status} ${response.statusText}`);
             }
     }
-    disconnectedCallback() {}
 }
 
 RegisterComponent('app-navigation', Navigation);
