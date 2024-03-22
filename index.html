@@ -3,6 +3,7 @@
 
     </title>
     <script src='app/app.js'></script>
+    <script src='app/router.js'></script>
     <script src='app/component.js'></script>
     <script src='app/decorators.js'></script>
     <script src='components/about/about.js'></script>
@@ -11,11 +12,16 @@
     <script src='components/navigation/navigation.js'></script>
     <script src='services/profile.service.js'></script>
     <script>
+        let router = new Router();
+        router.registrate([
+            { path: '/about', start: new About() },
+            { path: '/', start: new Home() },
+            { path: '/profile', start: new Profile()}
+        ]);
         let app = new App();
-        app.registrate('/about', 'about', new About());
-        app.registrate('/', 'home', new Home());
-        app.registrate('/profile', 'profile', new Profile());
-        app.ready();
+        app.setup([router]);
+        app.run();
+
     </script>
     <app-navigation></app-navigation>
     <app-router></app-router>

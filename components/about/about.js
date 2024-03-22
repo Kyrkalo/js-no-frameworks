@@ -4,4 +4,4 @@ class About extends Components {
     href = '#/about';
 }
 
-RegisterComponent('app-about', About);
+registerComponent('app-about', About);

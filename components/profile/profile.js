@@ -23,4 +23,4 @@ class Profile extends Components {
     }
 }
 
-RegisterComponent('app-profile', Profile);
+registerComponent('app-profile', Profile);
