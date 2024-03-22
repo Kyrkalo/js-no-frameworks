@@ -1,7 +1,7 @@
 
-class router extends HTMLElement {
+class Router extends HTMLElement {
     
     connectedCallback = () => this.innerHTML = `<div class='router'></div>`;
 }
 
-RegisterComponent('app-router', router);
+RegisterComponent('app-router', Router);
