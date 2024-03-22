@@ -1,6 +1,6 @@
 class Components extends HTMLElement {
 
-    bindings = [];
+    bindingCollection = [];
 
     constructor() { super(); }
 
@@ -12,56 +12,52 @@ class Components extends HTMLElement {
 
     disconnectedCallback() {
         this.onDispose();
-        this.unbinding();
+        this.bindingCollection.forEach(e => e.target.removeEventListener(e.event, e.func));
     }
 
     onInit () { }
 
     onDispose () { }
 
-    binding() {
-        const updateInstanceBind = this.updateInstance.bind(this);
-        document.querySelectorAll('[data-bind]').forEach(e => {
-            this.htmlBinding(e, updateInstanceBind);
-            this.instanceBinding(e);
+    binding() {        
+        const dataBindingCollection = Array.from(document.querySelectorAll('[data-bind]'));
+        if (dataBindingCollection.length > 0) {
+            dataBindingCollection.forEach(e => this.htmlBinding(e, this.updateInstance.bind(this)));
+    
+            const array = dataBindingCollection.map(e => e.dataset.bind.split('.').slice(0, -1).join('.'));
+            const set = new Set(array).forEach(e => this.instanceBinding(e.split('.')));
+            this.update(dataBindingCollection);
+        }
+    }
+
+    update(e) {
+        e.forEach(l => {
+            let t = this;
+            l.dataset.bind.split('.').forEach(key => t = t[key]);
+            l.value = t;            
         });
     }
 
     htmlBinding(e, func) {                
-        this.bindings.push({ target: e, event: 'input', func: func });
+        this.bindingCollection.push({ target: e, event: 'input', func: func });
         e.addEventListener('input', func);
     }
 
-    collection = [];
-
-    instanceBinding(event) {
-        if (event.dataset && event.dataset.bind) {
-            let t = this;
-            const keys = event.dataset.bind.split('.');
-            let append = [];
-            keys.forEach((key,index)=> {
-                if (index < keys.length - 1) {
-                    if (!t[key]) {
-                        t[key] = Object.create(null);
+    instanceBinding(keys = []) {        
+        let object = this;
+        keys.forEach(key => {
+            object[key] = new Proxy(object[key] || Object.create(null), {
+                set(target, prop, value) {
+                    if(target[prop] !== value) {
+                        target[prop] = value;
+                        document.querySelectorAll(`[data-bind='${[...keys, prop].join('.')}']`).forEach(l => { l.value = value; });
+                        return true;
                     }
-                    append.push(key);
-                }
-                if (index !== keys.length - 1 && !this.collection.some(l => l == key)) {
-                    this.collection.push(key);
-                    t[key] = new Proxy(t[key], {
-                        set(target, prop, value) {
-                            target[prop] = value;
-                            document.querySelectorAll(`[data-bind='${[...append, prop].join('.')}']`)
-                            .forEach(l => { l.value = value; });
-                            return true;
-                        }
-                    });
                 }
             });
-        }
+            object = object[key];
+        });
     }
-
-    unbinding = () => this.bindings.forEach(e => e.target.removeEventListener(e.event, e.func));
 
     updateInstance(event) {
         if (event.target && event.target.dataset.bind) {
@@ -71,7 +67,7 @@ class Components extends HTMLElement {
                 if (i == instance.length - 1) {
                     t[e] = event.target.value
                 } else {
-                    t = !t[e] ? t[e] = {} : t[e];
+                    t = !t[e] ? t[e] = Object.create(null) : t[e];
                 }
             });
         }

@@ -9,7 +9,7 @@ class Navigation extends Components {
                 throw new Error(`Failed to fetch HTML file: ${response.status} ${response.statusText}`);
             }
     }
-    instanceBinding() {}
+    binding() {}
 }
 
 registerComponent('app-navigation', Navigation);
