@@ -3,7 +3,7 @@
 
     </title>
     <script src='app/app.js'></script>
-    <script src='app/router.js'></script>
+    <script src='app/handlers/routerHandler.js'></script>
     <script src='app/component.js'></script>
     <script src='app/decorators.js'></script>
     <script src='components/about/about.js'></script>
@@ -12,7 +12,7 @@
     <script src='components/navigation/navigation.js'></script>
     <script src='services/profile.service.js'></script>
     <script>
-        let router = new Router();
+        let router = new jnf.handlers.RouterHandler();
         router.registrate([
             { path: '/about', start: new About() },
             { path: '/', start: new Home() },

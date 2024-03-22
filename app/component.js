@@ -1,51 +1,71 @@
 class Components extends HTMLElement {
 
-    constructor() {
-        super();
-        this.binding();
-    }
+    bindings = [];
+
+    constructor() { super(); }
 
     connectedCallback() {
-        this.onInit();
-        this.afterInit();
-        this.update();
+        setTimeout(() => {
+            this.onInit();
+            this.binding(); }, 100);
     }
 
     disconnectedCallback() {
-        this.dispose();
+        this.onDispose();
+        this.unbinding();
     }
 
-    onInit() { }
+    onInit () { }
 
-    afterInit() { }
+    onDispose () { }
 
-    dispose() { }
-
-    update() {
-        const elementsWithDataBind = document.querySelectorAll('[data-bind]');
-        elementsWithDataBind.forEach(e => {
-            const instance = e.dataset.bind.split('.');
-            if (instance) {
-                let t = this;
-                for(let item of instance) {
-                    t = t[item];
-                }
-                e.value = t;
-            }
+    binding() {
+        const updateInstanceBind = this.updateInstance.bind(this);
+        document.querySelectorAll('[data-bind]').forEach(e => {
+            this.htmlBinding(e, updateInstanceBind);
+            this.instanceBinding(e);
         });
     }
 
-    binding() {
-        setTimeout(() => {
-            const elementsWithDataBind = document.querySelectorAll('[data-bind]');
-            const bindFunction = this.updateEvent.bind(this);
-            elementsWithDataBind.forEach(e => e.addEventListener('input', bindFunction));
-        }, 100);
+    htmlBinding(e, func) {                
+        this.bindings.push({ target: e, event: 'input', func: func });
+        e.addEventListener('input', func);
     }
 
-    updateEvent(event) {
-        let t = this;
-        if (event.target.dataset.bind) {
+    collection = [];
+
+    instanceBinding(event) {
+        if (event.dataset && event.dataset.bind) {
+            let t = this;
+            const keys = event.dataset.bind.split('.');
+            let append = [];
+            keys.forEach((key,index)=> {
+                if (index < keys.length - 1) {
+                    if (!t[key]) {
+                        t[key] = Object.create(null);
+                    }
+                    append.push(key);
+                }
+                if (index !== keys.length - 1 && !this.collection.some(l => l == key)) {
+                    this.collection.push(key);
+                    t[key] = new Proxy(t[key], {
+                        set(target, prop, value) {
+                            target[prop] = value;
+                            document.querySelectorAll(`[data-bind='${[...append, prop].join('.')}']`)
+                            .forEach(l => { l.value = value; });
+                            return true;
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    unbinding = () => this.bindings.forEach(e => e.target.removeEventListener(e.event, e.func));
+
+    updateInstance(event) {
+        if (event.target && event.target.dataset.bind) {
+            let t = this;
             const instance = event.target.dataset.bind.split('.');
             instance.forEach((e, i) => {
                 if (i == instance.length - 1) {
