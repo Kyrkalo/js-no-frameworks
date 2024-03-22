@@ -2,10 +2,9 @@
 class Profile extends Components {
     href = '#/profile';
     template = 'components/profile/profile.html';
-
     profileService;
     
-    data = { }
+    //data = Object.create(null);
 
     constructor (arg = inject([ProfileService])) {
         super();
@@ -19,7 +18,8 @@ class Profile extends Components {
     }
 
     saveProfile (e) {
-        this.profileService.Save(this.data);
+        //this.profileService.Save(this.data);
+        this.data.fname = 'fdfdfdfd';
     }
 }
 
