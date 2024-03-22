@@ -11,4 +11,4 @@ class Navigation extends Components {
     }
 }
 
-RegisterComponent('app-navigation', Navigation);
+registerComponent('app-navigation', Navigation);
