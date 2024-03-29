@@ -9,7 +9,7 @@ jnf.handlers = {
         async execute() {
     
             let url = window.location.hash.slice(1) || '/';
-            let route = this.router[url];
+            let route = new this.router[url]();            
     
             if (route && this.currentTemplate != route) {
                 

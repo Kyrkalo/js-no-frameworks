@@ -14,9 +14,9 @@
     <script>
         let router = new jnf.handlers.RouterHandler();
         router.registrate([
-            { path: '/about', start: new About() },
-            { path: '/', start: new Home() },
-            { path: '/profile', start: new Profile()}
+            { path: '/about', start: About },
+            { path: '/', start: Home },
+            { path: '/profile', start: Profile}
         ]);
         let app = new App();
         app.setup([router]);
