@@ -25,7 +25,7 @@ class Components extends HTMLElement {
             dataBindingCollection.forEach(e => this.htmlBinding(e, this.updateInstance.bind(this)));
     
             const array = dataBindingCollection.map(e => e.dataset.bind.split('.').slice(0, -1).join('.'));
-            const set = new Set(array).forEach(e => this.instanceBinding(e.split('.')));
+            const set = new Set(array).forEach(e => this.updateUI(e.split('.')));
             this.update(dataBindingCollection);
         }
     }
@@ -43,14 +43,16 @@ class Components extends HTMLElement {
         e.addEventListener('input', func);
     }
 
-    instanceBinding(keys = []) {        
+    updateUI(keys = []) {        
         let object = this;
         keys.forEach(key => {
             object[key] = new Proxy(object[key] || Object.create(null), {
                 set(target, prop, value) {
                     if(target[prop] !== value) {
                         target[prop] = value;
-                        document.querySelectorAll(`[data-bind='${[...keys, prop].join('.')}']`).forEach(l => { l.value = value; });
+                        document
+                        .querySelectorAll(`[data-bind='${[...keys, prop].join('.')}']`)
+                        .forEach(l => { l.value = value; });
                         return true;
                     }
                 }
