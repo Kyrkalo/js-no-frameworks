@@ -24,8 +24,8 @@ class Components extends HTMLElement {
         if (dataBindingCollection.length > 0) {
             dataBindingCollection.forEach(e => this.htmlBinding(e, this.updateInstance.bind(this)));
     
-            const array = dataBindingCollection.map(e => e.dataset.bind.split('.').slice(0, -1).join('.'));
-            const set = new Set(array).forEach(e => this.updateUI(e.split('.')));
+            const array = dataBindingCollection.map(e => e.dataset.bind.split('.').slice(0, -1));
+            new Set(array).forEach(e => this.updateUI(e));
             this.update(dataBindingCollection);
         }
     }
